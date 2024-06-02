@@ -48,7 +48,18 @@ def generateOperations():
 	negativeControlLysisNode = lysisPlate.AllocateLiquidNode("Negative Control Lysis Node", ignoreVolumeWarnings=True, colour="Gray")
 	
 	pcrPlate = myra.LoadPlate("Generic 96 Well 0.2 mL Skirted Plate", "E")
-	pcrNodes = [pcrPlate.AllocateLiquidNode(x["Name"] + " (PCR Node)", colour="Pink") for x in samples.Valid]
+	pcrNodes = []
+	reactionBuffer1Nodes = [pcrPlate.AllocateLiquidNode(x["Name"] + " (PCR Node)", colour="Pink") for x in samples.Valid if "Reaction Buffer 1" in x["Name"]]
+	pcrNodes.extend(reactionBuffer1Nodes)
+	if reactionBuffer2Volume:
+		reactionBuffer2Nodes = [pcrPlate.AllocateLiquidNode(x["Name"] + " (PCR Node)", colour="Pink") for x in samples.Valid if "Reaction Buffer 2" in x["Name"]]
+		pcrNodes.extend(reactionBuffer2Nodes)
+	if reactionBuffer3Volume:
+		reactionBuffer3Nodes = [pcrPlate.AllocateLiquidNode(x["Name"] + " (PCR Node)", colour="Pink") for x in samples.Valid if "Reaction Buffer 3" in x["Name"]]
+		pcrNodes.extend(reactionBuffer3Nodes)
+	if reactionBuffer4Volume:
+		reactionBuffer4Nodes = [pcrPlate.AllocateLiquidNode(x["Name"] + " (PCR Node)", colour="Pink") for x in samples.Valid if "Reaction Buffer 4" in x["Name"]]
+		pcrNodes.extend(reactionBuffer4Nodes)
 	positiveControlpcrNode = pcrPlate.AllocateLiquidNode("Positive Control PCR Node", colour="Green")
 	negativeControlpcrNode = pcrPlate.AllocateLiquidNode("Negative Control PCR Node", colour="Gray")
 	
@@ -66,25 +77,25 @@ def generateOperations():
 		
 	with OperationGroup("Transfer Reaction Buffer"):
 		with OperationGroup("Transfer Reaction Buffer 1"):
-			myra.TransferLiquid(reactionBuffer1, pcrNodes, reactionBuffer1Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
+			myra.TransferLiquid(reactionBuffer1, reactionBuffer1Nodes, reactionBuffer1Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
 			myra.TransferLiquid(reactionBuffer1, positiveControlpcrNode, reactionBuffer1Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
 			myra.TransferLiquid(reactionBuffer1, negativeControlpcrNode, reactionBuffer1Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8)
 		
 		if reactionBuffer2Volume: 
 			with OperationGroup("Transfer Reaction Buffer 2"):
-				myra.TransferLiquid(reactionBuffer2, pcrNodes, reactionBuffer2Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
+				myra.TransferLiquid(reactionBuffer2, reactionBuffer2Nodes, reactionBuffer2Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
 				myra.TransferLiquid(reactionBuffer2, positiveControlpcrNode, reactionBuffer2Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
 				myra.TransferLiquid(reactionBuffer2, negativeControlpcrNode, reactionBuffer2Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8)			
 
 		if reactionBuffer3Volume: 
 			with OperationGroup("Transfer Reaction Buffer 3"):
-				myra.TransferLiquid(reactionBuffer3, pcrNodes, reactionBuffer3Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
+				myra.TransferLiquid(reactionBuffer3, reactionBuffer3Nodes, reactionBuffer3Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
 				myra.TransferLiquid(reactionBuffer3, positiveControlpcrNode, reactionBuffer3Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
 				myra.TransferLiquid(reactionBuffer3, negativeControlpcrNode, reactionBuffer3Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8)							
 
 		if reactionBuffer4Volume: 
 			with OperationGroup("Transfer Reaction Buffer 4"):
-				myra.TransferLiquid(reactionBuffer4, pcrNodes, reactionBuffer4Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
+				myra.TransferLiquid(reactionBuffer4, reactionBuffer4Nodes, reactionBuffer4Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
 				myra.TransferLiquid(reactionBuffer4, positiveControlpcrNode, reactionBuffer4Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8, ejectTip=False)
 				myra.TransferLiquid(reactionBuffer4, negativeControlpcrNode, reactionBuffer4Volume, settings=TransferSettings.Viscous(), maxTipReuseCount=8)	
 		
